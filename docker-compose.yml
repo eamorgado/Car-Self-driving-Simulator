@@ -1,0 +1,14 @@
+version: '2.3' #Set version 2.3 to use tag runtime
+services: 
+    carla:
+      container_name: ds_carla
+      build: 
+        context: .
+        dockerfile: Dockerfile
+      restart: always
+      runtime: nvidia
+      ipc: host
+      environment: 
+        - NVIDIA_VISIBLE_DEVICES=all
+      ports: 
+        - "2000-2002:2000-2002"
