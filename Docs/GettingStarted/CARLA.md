@@ -9,6 +9,8 @@ During this project we used [CARLA V0.9.10.1][carla-0.9.10.1]. You can checkout 
 wget https://carla-releases.s3.eu-west-3.amazonaws.com/Linux/CARLA_0.9.10.1.tar.gz
 ```
 
+We were forced to move to windows version sice we were expiriencing some issues with CARLA and NVIDIA drivers in Linux 
+
 ## Configure CARLA for server use
 If you only want to use CARLA as a server and connect to it using the clients you can do so with their docker image.
 
