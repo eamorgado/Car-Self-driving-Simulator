@@ -1,5 +1,5 @@
 # Project Plan
-[Docs][docs-url] -> Getting Started
+[Docs][docs-url] -> Project Plan
 
 
 Considering the difficulty of this project, we divided it into several projects, each building on the previous one. It's highly probable that we have yet to finish some of them, but again, this is a work in progress.
