@@ -1,4 +1,6 @@
 # Project Plan
+[Docs][docs-url] -> Getting Started
+
 
 Considering the difficulty of this project, we divided it into several projects, each building on the previous one. It's highly probable that we have yet to finish some of them, but again, this is a work in progress.
 
@@ -27,3 +29,7 @@ This project can also be divided into epics/milestones:
 ## Traffic signs detection
 
 ## Obstacle detection
+
+
+
+[docs-url]: https://github.com/eamorgado/Car-Self-driving-Simulator/blob/main/README.md
