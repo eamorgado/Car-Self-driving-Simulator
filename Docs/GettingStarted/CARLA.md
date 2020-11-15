@@ -15,9 +15,16 @@ We were forced to move to windows version sice we were expiriencing some issues 
 If you only want to use CARLA as a server and connect to it using the clients you can do so with their docker image.
 
 
+## Installing requirements
+
+To run any script we will need to hae installed **Python3.7**, and will need to install `pygame` and `numpy`. The python version must be a **64 bit version**.
+
+Note, if you have multiple versions you can run the scripts with `py -3.7 script.py` this way you will be able to import the carla module
 
 
+## Using CARLA
 
+Since we have to mode to Windows we have no way of testing the Linux version, on Windows all you need to do is to run the `CarlaUE4.exe` executable file, this wil launch the carla graphical server, this will be **GPU bound**, they recommend the use of at least 4GB of VRAM.
 
 
 
