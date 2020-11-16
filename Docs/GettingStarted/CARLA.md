@@ -9,10 +9,24 @@ During this project we used [CARLA V0.9.10.1][carla-0.9.10.1]. You can checkout 
 wget https://carla-releases.s3.eu-west-3.amazonaws.com/Linux/CARLA_0.9.10.1.tar.gz
 ```
 
-We were forced to move to windows version sice we were expiriencing some issues with CARLA and NVIDIA drivers in Linux 
-
 ## Configure CARLA for server use
-If you only want to use CARLA as a server and connect to it using the clients you can do so with their docker image.
+We expirience some errors installing and using CARLA with ubuntu out of the box, to solve any dependency issues, and since CARLA comes with a Dockerfile, we build an image of CARLA 0.9.10
+
+```bash
+docker build -t "carla:Dockerfile" .
+```
+
+After that we ran
+```bash
+docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -p 2000-2002:2000-2002 -it --gpus all carla bash
+```
+
+Inside the running container we finnaly ran 
+```bash
+SDL_VIDEODRIVER=x11 ./CarlaUE4.sh -opengl
+```
+
+And this started our server, when we later compared to windows, eventhough it still consumed many of the GPU resources, running on docker proved more effective since we were not expiriencing stutter in other software.
 
 First you need to set up the NVIDIA driver in docker
 
@@ -70,7 +84,21 @@ This should give you a similar output
 
 To run any script we will need to hae installed **Python3.7**, and will need to install `pygame` and `numpy`. The python version must be a **64 bit version**.
 
-Note, if you have multiple versions you can run the scripts with `py -3.7 script.py` this way you will be able to import the carla module
+Note, if you have multiple versions you can install the `virtualenv` pip tool and make a Python virtual environment with your desired version
+
+```bash
+virtualenv --python=/usr/bin/python3.7 env
+```
+
+Then activate it
+```bash
+source env/bin/activate
+```
+
+Then we need to install the dependencies, in the CARLA folder,
+```bash
+pip install -r PythonAPI/examples/requirements.txt
+```
 
 
 ## Using CARLA
