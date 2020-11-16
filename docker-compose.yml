@@ -1,14 +1,21 @@
-version: '2.3' #Set version 2.3 to use tag runtime
+version: '3' #Set version 2.3 to use tag runtime
 services: 
     carla:
       container_name: ds_carla
       build: 
-        context: .
+        context: ./devops/carla
         dockerfile: Dockerfile
       restart: always
-      runtime: nvidia
       ipc: host
       environment: 
         - NVIDIA_VISIBLE_DEVICES=all
       ports: 
         - "2000-2002:2000-2002"
+      command: ["SDL_VIDEODRIVER=x11","./CarlaUE4.sh","-opengl"]
+    python:
+      container_name: ds_python
+      build: 
+        context: ./devops/python
+        dockerfile: Dockerfile
+      restart: always
+      command: ["python3.7 /python/util/config.py -x /python/util/opendrive/TownBig.xodr"]
