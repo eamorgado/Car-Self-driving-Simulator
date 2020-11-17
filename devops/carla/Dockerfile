@@ -29,10 +29,14 @@ FROM carlasim/carla:0.9.10
 LABEL maintainer="eapmcm@gmail.com"
 LABEL version="1.0.0"
 
+USER root
+RUN apt-get update && apt-get install -y xdg-user-dirs xdg-utils && apt-get clean
+
+USER carla
 
 # Select the video driver between offsreen and x11
 # x11 is recommended for vulkan support
 ENV SDL_VIDEODRIVER=x11
 
 # you can also run CARLA in -opengl mode
-CMD /bin/bash CarlaUE4.sh -vulkan
+CMD /bin/bash /home/carla/CarlaUE4.sh -vulkan

@@ -11,11 +11,14 @@ services:
         - NVIDIA_VISIBLE_DEVICES=all
       ports: 
         - "2000-2002:2000-2002"
-      command: ["SDL_VIDEODRIVER=x11","./CarlaUE4.sh","-opengl"]
+      #command: ["ls"]
+      command: ["./CarlaUE4.sh --opengl"]
     python:
       container_name: ds_python
       build: 
         context: ./devops/python
         dockerfile: Dockerfile
       restart: always
+      depends_on: 
+        - carla
       command: ["python3.7 /python/util/config.py -x /python/util/opendrive/TownBig.xodr"]

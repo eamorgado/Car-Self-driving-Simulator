@@ -16,5 +16,6 @@ FROM carlasim/carla:0.9.10
 
 WORKDIR /python
 RUN cp -rf /home/carla/PythonAPI/* /python
+RUN rm -rf /home/carla
 
 CMD "python3.7 /python/util/config.py -x /python/util/opendrive/TownBig.xodr"
