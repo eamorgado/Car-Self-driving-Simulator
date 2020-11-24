@@ -2,7 +2,7 @@
 Collection of image filters (grayscale, gaussian, canny) and pillow <=> cv image conversion
 """
 
-import cv2
+import cv2 as cv
 import numpy as np
 from PIL import Image
 
@@ -10,7 +10,7 @@ toPillow = lambda cv_image: Image.fromarray(cv_image)
 toCV = lambda pillow_image: np.asarray(pillow_image)
 isCV = lambda img: isinstance(img,np.ndarray)
 
-toGrayScale = lambda img: cv.cvtColor(toCV(img) if not isCV(img) else img,cv.COLOR_RGB2GRAY) 
+toGrayScale = lambda img: cv.cvtColor(img,cv.COLOR_RGB2GRAY) 
 
 def filterGaussian(img,size=(5,5),stdv=0):
     """Summary of filterGaussian
@@ -27,7 +27,7 @@ def filterGaussian(img,size=(5,5),stdv=0):
     """
 
     if not isCV(img):
-        img = toCV(img)
+        raise ValueError("Image not in np.array format")
 
     if not isinstance(size,tuple):
         raise ValueError('filterGaussian: Size for Gaussian filter not tuple')
@@ -48,7 +48,7 @@ def filterCanny(img,min_val=50,max_val=150,size=(5,5),stdv=0):
         -   Hysteresis thresholding
     """
     if not isCV(img):
-        img = toCV(img)
+        raise ValueError("Image not in np.array format")
     
     if min_val >= max_val:
         raise ValueError('filterCanny: Value order incorrect')

@@ -1,11 +1,12 @@
 import cv2 as cv
 import numpy as np
 from detector.filters import toGrayScale, filterGaussian, filterCanny
-from detector.logging import log_info, log_error, show_traceback
+from detector.logging.logging import log_info, log_error, show_traceback
 
 def laneDetector(path,is_image=False,do_canny=True,do_gray=False,do_gaussian=False):
     try:
-        if is is_image:
+        if is_image:
+            log_info('Image lane detection selected')
             img = cv.imread(path)
 
             if do_canny:
@@ -18,6 +19,8 @@ def laneDetector(path,is_image=False,do_canny=True,do_gray=False,do_gaussian=Fal
                 gaussian = filterGaussian(img)
                 cv.imgshow("Gaussian Filter",gaussian)
         else:
+            log_info('Video lane detection selected')
+            print(path)
             cap = cv.VideoCapture(path)
             prev_frame = None
             while(cap.isOpened()):
@@ -36,6 +39,7 @@ def laneDetector(path,is_image=False,do_canny=True,do_gray=False,do_gaussian=Fal
                     cv.imshow(str,img)
                     prev_frame = img
                 except Exception as e:
+                    print(e)
                     if prev_frame is not None:
                         str = ""
                         if do_canny:
@@ -46,6 +50,8 @@ def laneDetector(path,is_image=False,do_canny=True,do_gray=False,do_gaussian=Fal
                             str = "Gaussian Filter"
                         cv.imshow(str,prev_frame)
                     continue
+                if cv.waitKey(10) & 0xFF == ord('q'):
+                    break
             cap.release()
     except Exception as e:
         show_traceback()

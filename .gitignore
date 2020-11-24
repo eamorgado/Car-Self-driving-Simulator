@@ -2,6 +2,9 @@
 .env
 .flaskenv
 
+#mp4 files
+*.mp4
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

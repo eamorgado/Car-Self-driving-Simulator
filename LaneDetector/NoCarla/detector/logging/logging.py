@@ -17,6 +17,7 @@ def log_error(str):
 
 def log_info(str):
     logging.info(str)
+    print(str)
     pass
 
 def show_traceback():
