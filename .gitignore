@@ -5,6 +5,9 @@
 #mp4 files
 *.mp4
 
+#log files
+*.log
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

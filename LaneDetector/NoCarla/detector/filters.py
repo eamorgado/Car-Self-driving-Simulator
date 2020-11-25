@@ -56,4 +56,5 @@ def filterCanny(img,min_val=50,max_val=150,size=(5,5),stdv=0):
     gray_scale = toGrayScale(img)
     gaussian = filterGaussian(img,size=size,stdv=stdv)
     return cv.Canny(gaussian,min_val,max_val)
+
     

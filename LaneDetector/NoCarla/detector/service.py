@@ -11,13 +11,14 @@ def laneDetector(path,is_image=False,do_canny=True,do_gray=False,do_gaussian=Fal
 
             if do_canny:
                 canny = filterCanny(img)
-                cv.imshow("Canny Filter",img)
+                cv.imshow("Canny Filter",canny)
             elif do_gray:
                 gray = toGrayScale(img)
-                cv.imgshow("Gray Scale Filter",gray)
+                cv.imshow("Gray Scale Filter",gray)
             elif do_gaussian:
                 gaussian = filterGaussian(img)
-                cv.imgshow("Gaussian Filter",gaussian)
+                cv.imshow("Gaussian Filter",gaussian)
+            cv.waitKey(0); cv.destroyAllWindows(); cv.waitKey(1) 
         else:
             log_info('Video lane detection selected')
             print(path)
@@ -28,34 +29,33 @@ def laneDetector(path,is_image=False,do_canny=True,do_gray=False,do_gaussian=Fal
                     _,frame = cap.read()
                     frame = cv.resize(frame,(800,600))
                     if do_canny:
-                        str = "Canny Filter"
+                        s = "Canny Filter"
                         img = filterCanny(frame)
                     elif do_gray:
-                        str = "Gray Scale Filter"
+                        s = "Gray Scale Filter"
                         img = toGrayScale(frame)
                     elif do_gaussian:
-                        str = "Gaussian Filter"
+                        s = "Gaussian Filter"
                         img = filterGaussian(frame)
-                    cv.imshow(str,img)
+                    cv.imshow(s,img)
                     prev_frame = img
                 except Exception as e:
                     print(e)
                     if prev_frame is not None:
-                        str = ""
+                        s = ""
                         if do_canny:
-                            str = "Canny Filter"
+                            s = "Canny Filter"
                         elif do_gray:
-                            str = "Gray Scale Filter"
+                            s = "Gray Scale Filter"
                         elif do_gaussian:
-                            str = "Gaussian Filter"
-                        cv.imshow(str,prev_frame)
+                            s = "Gaussian Filter"
+                        cv.imshow(s,prev_frame)
                     continue
                 if cv.waitKey(10) & 0xFF == ord('q'):
                     break
             cap.release()
+            log_info('Closing all windows')
+            cv.destroyAllWindows()
     except Exception as e:
         show_traceback()
         log_error("Error Running laneDetector: " + str(e))
-
-    log_info('Closing all windows')
-    cv.destroyAllWindows()
