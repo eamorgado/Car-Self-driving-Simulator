@@ -5,5 +5,5 @@
 
 
 
-[docs-url]: https://github.com/eamorgado/Car-Self-driving-Simulator/blob/main/README.md
-[carla-url]: https://github.com/eamorgado/Car-Self-driving-Simulator/blob/main/Docs/GettingStarted/CARLA.md
+[docs-url]: ../../README.md
+[carla-url]: CARLA.md
