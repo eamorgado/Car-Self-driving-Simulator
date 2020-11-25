@@ -32,4 +32,4 @@ This project can also be divided into epics/milestones:
 
 
 
-[docs-url]: https://github.com/eamorgado/Car-Self-driving-Simulator/blob/main/README.md
+[docs-url]: ../../README.md
