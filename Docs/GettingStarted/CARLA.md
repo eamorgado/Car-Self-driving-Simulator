@@ -107,7 +107,7 @@ Since we have to mode to Windows we have no way of testing the Linux version, on
 
 
 
-[docs-url]: https://github.com/eamorgado/Car-Self-driving-Simulator/blob/main/README.md
-[getting-started-url]: https://github.com/eamorgado/Car-Self-driving-Simulator/blob/main/Docs/GettingStarted/GettingStarted.md
+[docs-url]: ../../README.md
+[getting-started-url]: GettingStarted.md
 [carla-0.9.10.1]: https://github.com/carla-simulator/carla/releases/tag/0.9.10.1
 [carla-releases]: https://github.com/carla-simulator/carla/releases
