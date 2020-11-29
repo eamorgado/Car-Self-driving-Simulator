@@ -57,4 +57,54 @@ def filterCanny(img,min_val=50,max_val=150,size=(5,5),stdv=0):
     gaussian = filterGaussian(img,size=size,stdv=stdv)
     return cv.Canny(gaussian,min_val,max_val)
 
+
+def segmentRegion(frame):
+    # Image -> multi-directional array with intensities of each pixel ==> use fram.shape to get puple [#row,#cols,#channels] with the dimensions of image
+    height_frame = frame.shape[0]
+    width_frame = frame.shape[1]
     
+    top_of_mask = height_frame*0.45
+    area_interest_vertices = np.array([
+        [0,height_frame],
+        [width_frame*0.50,top_of_mask],
+        [width_frame*0.65,top_of_mask],
+        [width_frame,height_frame]
+    ],np.int32)
+    area_interest_vertices = [area_interest_vertices]
+
+    # Creates an image filled with zero intensities with the same dimensions as the frame
+    mask = np.zeros_like(frame)
+
+    if len(frame.shape) > 2:
+        n_channels = frame.shape[2]
+        ignore_colors = (255,)*n_channels
+    else:
+        ignore_colors = 255
+    
+    # mask will be filled with values of 1 and the other areas will be filled with values of 0
+    cv.fillPoly(mask,area_interest_vertices,ignore_colors)
+
+    #bitwise operator will keep only the desired area
+    masked_frame = cv.bitwise_and(frame,mask)
+    return masked_frame
+
+
+def houghFilter(frame,distance_resolution=2,angle_resolution=np.pi/180,min_n_intersections=100,min_line_size=100,max_line_gap=50):
+    """
+    Params:
+        frame
+        distance_resolution:    distance resolution of accumulator in pixels, larger ==> less precision
+        angle_resolution:   angle of accumulator in radians, larger ==> less precision
+        min_n_intersections: minimum number of intersections
+        min_line_size:  minimum length of line in pixels
+        max_line_gap:   maximum distance in pixels between disconnected lines
+    """
+
+    frame = filterCanny(frame)
+    frame = segmentRegion(frame)
+
+    placeholder = np.array([])
+    hough = cv.HoughLinesP(frame,distance_resolution,angle_resolution,min_n_intersections,placeholder,min_line_size,max_line_gap)
+    return hough
+
+

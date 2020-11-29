@@ -20,11 +20,15 @@ if __name__ == '__main__':
         parser.add_argument('--gray',dest='gray',action='store_true',help='If used, it will convert the image or video to gray scale')
         parser.add_argument('--gaussian',dest='gaussian',action='store_true',help='If used, it will apply a Gaussian filter to the image or video')
         parser.add_argument('--canny',dest='canny',action='store_true',help='If used, it will apply a Canny filter to the image or video')
+        parser.add_argument('--segment',dest='segment',action='store_true',help='If used, it will segment an image or video')
+        parser.add_argument('--hough',dest='hough',action='store_true',help='If used, it will apply hough method to segmented canny filtered image or video')
         parser.set_defaults(
             image=False,
             gray=False,
             gaussian=False,
-            canny=False
+            canny=False,
+            segment=False,
+            hough=False
         )
         #Add other parameters:
         #   --canny
@@ -39,6 +43,8 @@ if __name__ == '__main__':
 
         image = args.image
         gray, gaussian, canny = args.gray, args.gaussian, args.canny
+        segment = args.segment
+        hough = args.hough
 
 
         log_info('Starting Lane detection')
@@ -51,7 +57,9 @@ if __name__ == '__main__':
             is_image=image,
             do_canny=canny,
             do_gray=gray,
-            do_gaussian=gaussian
+            do_gaussian=gaussian,
+            do_segment=segment,
+            do_hough=hough
         )
 
 
