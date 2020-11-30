@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 from detector.filters import *
+from detector.visualize import *
 from detector.logging.logging import log_info, log_error, show_traceback
 
 def laneDetector(path,is_image=False,do_canny=True,do_gray=False,do_gaussian=False,do_segment=False,do_hough=False):
@@ -32,7 +33,10 @@ def laneDetector(path,is_image=False,do_canny=True,do_gray=False,do_gaussian=Fal
                 cv.imshow("Segmented image",segment)
             elif do_hough:
                 hough = houghFilter(img)
-                cv.imshow("Hough filter",hough)
+                lines = calculateLinesFromHough(img,hough)
+                l_v = showLines(img,lines)
+                img = cv.addWeighted(img,0.9,l_v,1,1)
+                cv.imshow("Hough filter",img)
 
             cv.waitKey(0); cv.destroyAllWindows(); cv.waitKey(1) 
         else:
@@ -67,10 +71,14 @@ def laneDetector(path,is_image=False,do_canny=True,do_gray=False,do_gaussian=Fal
                         img = segmentRegion(frame)
                     elif do_hough:
                         s = "Hough filter"
-                        img = houghFilter(img)
+                        hough = houghFilter(frame)
+                        lines = calculateLinesFromHough(frame,hough)
+                        l_v = showLines(frame,lines)
+                        img = cv.addWeighted(frame,0.9,l_v,1,1)
                     cv.imshow(s,img)
                     prev_frame = img
                 except Exception as e:
+                    show_traceback()
                     print(e)
                     if prev_frame is not None:
                         s = ""

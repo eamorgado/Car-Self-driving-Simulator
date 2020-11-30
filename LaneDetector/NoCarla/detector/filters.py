@@ -89,7 +89,7 @@ def segmentRegion(frame):
     return masked_frame
 
 
-def houghFilter(frame,distance_resolution=2,angle_resolution=np.pi/180,min_n_intersections=100,min_line_size=100,max_line_gap=50):
+def houghFilter(frame,distance_resolution=2,angle_resolution=np.pi/180,min_n_intersections=100,min_line_size=150,max_line_gap=50):
     """
     Params:
         frame
@@ -102,7 +102,7 @@ def houghFilter(frame,distance_resolution=2,angle_resolution=np.pi/180,min_n_int
 
     frame = filterCanny(frame)
     frame = segmentRegion(frame)
-
+    cv.imshow('Segment',frame)
     placeholder = np.array([])
     hough = cv.HoughLinesP(frame,distance_resolution,angle_resolution,min_n_intersections,placeholder,min_line_size,max_line_gap)
     return hough
