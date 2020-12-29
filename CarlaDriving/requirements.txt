@@ -1,0 +1,7 @@
+Flask==1.1.2
+Flask_Cors==3.0.9
+Flask_Classful==0.14.2
+numpy==1.19.4
+opencv-python==4.4.0.46
+pygame==2.0.1
+pyinstaller==4.0
