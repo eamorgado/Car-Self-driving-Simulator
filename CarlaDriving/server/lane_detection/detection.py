@@ -1,26 +1,33 @@
 import numpy as np
 import cv2 as cv
+import math
 from server.cv_utils import *
+from server.lane_detection.utils import *
+import matplotlib.pyplot as plt
+
+left_a, left_b, left_c = [],[],[]
+right_a, right_b, right_c = [],[],[]
 
 def detection(img,service,show_canny=False,show_hough=False):
-    p1_r,p2_r,p_avg_r,count_pos_r,  p1_r,p2_r,p_avg_l,count_pos_r = initPoints()
-
     img = convertRGB(img)
     img = resizeImg(img,(service.screen_width,service.screen_height))
+    
+    #Gray scale + Gaussian + Canny/Sobel filter
+    canny = filterCanny(img)
+    cv.imshow("Canny edge filter",canny)
 
-    #ROI coordinates
-    img = img[240:480, 108:532]
-    img = resizeImg(img, (424,240))
+    segmented = segmentRegion(canny)
+    cv.imshow("Segmented image",segmented)
 
-    #Gaussian filter 5x5
-    img = gaussianFilter(img,5,5)
+    hough_lines = houghFilter(segmented)
+    lines = calculateLines(img,hough_lines)
 
-    #Canny edge detector with Sobel filter
-    img = cannyFilter(img,50,100)
+    #Calculate steering angle
+    steering_angle = calculateSteeringAngle(img,lines)
 
-    if show_canny:
-        cv.imshow('Canny edge Filter',img)
+    middle_img = showMidLine(img,steering_angle)
+    lines_img = showLines(img,lines)
 
-
-    #Hough lines transformation
-    lines = cv.HoughLinesP(img, rho=1, theta=np.pi / 180.0, threshold=25, minLineLength=10, maxLineGap=20)
+    lines_img = cv.add(lines_img, middle_img) 
+    img =  cv.addWeighted(img, 0.8, lines_img, 1, 1) 
+    cv.imshow("Hough filter",img)
