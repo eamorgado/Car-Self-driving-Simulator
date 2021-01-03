@@ -3,7 +3,7 @@ Logging module, generates log file for app
 """
 import traceback
 import logging
-
+from server import core
 
 logging.basicConfig(filename='./service.log',
                      filemode='a',
@@ -17,8 +17,12 @@ def log_error(str):
 
 def log_info(str):
     logging.info(str)
-    print(str)
     pass
 
-def show_traceback():
-    print(traceback.print_exc())
+def show_traceback(override=False):
+    if override:
+        print(traceback.print_exc())
+        return
+
+    if bool(core.app['DEBUG']):
+        print(traceback.print_exc())
