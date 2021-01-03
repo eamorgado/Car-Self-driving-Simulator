@@ -1,3 +1,4 @@
+import math
 import carla
 import pygame
 import cv2 as cv
@@ -27,7 +28,7 @@ class Service():
 
 
         self.client = carla.Client(carla_host,carla_port)
-        self.client.set_timeout(2.0)
+        self.client.set_timeout(5.0)
 
         self.display = pygame.display.set_mode(
             (self.screen_width,self.screen_height),
@@ -53,6 +54,9 @@ class Service():
 
     
     def loop(self):
+        core.app['LANE_STEERING'] = False
+        core.app['LANE_STEERING_ANGLE'] = 0.0
+        steering_angle = 90
         while True:
             self.clock.tick_busy_loop(60)
             if self.controller.parse_events(self.client, self.world, self.clock):
@@ -63,8 +67,31 @@ class Service():
             self.world.render(self.display)
             pygame.display.flip()
 
-            lane_detection(core.app['CAMERA_IMAGE'],self,show_canny=True,show_hough=True)
+            
+            new_steering_angle = lane_detection(core.app['CAMERA_IMAGE'],self,steering_angle,show_canny=True,show_hough=True)
 
+            if new_steering_angle is not None and new_steering_angle >= 0:
+                steering_angle = new_steering_angle
+                t = ""
+                if steering_angle > 0 and steering_angle < 89:
+                    t = "Turn Left"
+                elif steering_angle >= 89 and steering_angle <= 91:
+                    t = "Straight forward"
+                else:
+                    t = "Turn right"
+                
+                #Steering Angle [-1.0,...,0.0,...,1.0]
+                #Degrees:       [0º,...,90º,...,180º]
+                #Function: -cos(x)
+                converted_angle = math.radians(steering_angle)
+                converted_angle = math.cos(converted_angle) * -1
+                
+                #print(t + '\t' + str(converted_angle))
+                core.app['LANE_STEERING_ANGLE'] = converted_angle
+
+                self.hud.notification(t)
+
+                #self.controller.got_model_event = True
             
 
 

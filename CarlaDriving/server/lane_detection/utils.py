@@ -176,8 +176,7 @@ def showLines(img,lines,color=(255,0,0),thickness=5):
         for x1, y1, x2, y2 in lines:
             cv.line(line_img, (x1,y1), (x2,y2), color, thickness)
     return line_img
-
-
+    
 
 def calculateSteeringAngle(img,lines):
     if len(lines) == 0:

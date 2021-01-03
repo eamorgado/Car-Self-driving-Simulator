@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 left_a, left_b, left_c = [],[],[]
 right_a, right_b, right_c = [],[],[]
 
-def detection(img,service,show_canny=False,show_hough=False):
+def detection(img,service,curr_steering_angle,show_canny=False,show_hough=False):
     img = convertRGB(img)
     img = resizeImg(img,(service.screen_width,service.screen_height))
     
@@ -29,5 +29,13 @@ def detection(img,service,show_canny=False,show_hough=False):
     lines_img = showLines(img,lines)
 
     lines_img = cv.add(lines_img, middle_img) 
-    img =  cv.addWeighted(img, 0.8, lines_img, 1, 1) 
+
+    img =  cv.addWeighted(img, 1, lines_img, 0.5, 1)
+
     cv.imshow("Hough filter",img)
+
+    #Steer the car
+    steering_angle = stabilizeSteeringAngle(curr_steering_angle,steering_angle,len(lines))
+    #print('Angle', steering_angle)
+
+    return steering_angle

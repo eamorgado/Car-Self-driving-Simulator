@@ -27,8 +27,11 @@ from pygame.locals import K_q
 from pygame.locals import K_r
 from pygame.locals import K_s
 from pygame.locals import K_w
+from pygame.locals import K_l
 from pygame.locals import K_MINUS
 from pygame.locals import K_EQUALS
+
+from server import core
 
 class KeyboardControl(object):
     def __init__(self, world, start_in_autopilot):
@@ -105,6 +108,9 @@ class KeyboardControl(object):
                     else:
                         world.recording_start += 1
                     world.hud.notification("Recording start time is %d" % (world.recording_start))
+                elif event.key == K_l:
+                    core.app['LANE_STEERING'] = not core.app['LANE_STEERING']
+                    world.hud.notification(str('Lane Auto Steering Toggle' + str(core.app['LANE_STEERING'])))
                 if isinstance(self._control, carla.VehicleControl):
                     if event.key == K_q:
                         self._control.gear = 1 if self._control.reverse else -1
@@ -138,10 +144,17 @@ class KeyboardControl(object):
             self._steer_cache += steer_increment
         else:
             self._steer_cache = 0.0
+
+        if core.app['LANE_STEERING']:
+            self._steer_cache = core.app['LANE_STEERING_ANGLE']
+
         self._steer_cache = min(0.7, max(-0.7, self._steer_cache))
+        
+
         self._control.steer = round(self._steer_cache, 1)
         self._control.brake = 1.0 if keys[K_DOWN] or keys[K_s] else 0.0
         self._control.hand_brake = keys[K_SPACE]
+
 
     def _parse_walker_keys(self, keys, milliseconds):
         self._control.speed = 0.0

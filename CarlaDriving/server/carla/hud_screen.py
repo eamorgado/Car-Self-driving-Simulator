@@ -6,6 +6,8 @@ from server.carla.text.help_text import HelpText
 from server.carla.text.fadding_text import FadingText
 from server.carla.utils import get_actor_display_name
 
+from server import core
+
 class HUD(object):
     def __init__(self, width, height):
         self.dim = (width, height)
@@ -62,6 +64,7 @@ class HUD(object):
             'Height:  % 18.0f m' % t.location.z,
             '']
         if isinstance(c, carla.VehicleControl):
+            lane_toggle = 'On' if core.app['LANE_STEERING'] else 'OFF'
             self._info_text += [
                 ('Throttle:', c.throttle, 0.0, 1.0),
                 ('Steer:', c.steer, -1.0, 1.0),
@@ -69,7 +72,9 @@ class HUD(object):
                 ('Reverse:', c.reverse),
                 ('Hand brake:', c.hand_brake),
                 ('Manual:', c.manual_gear_shift),
-                'Gear:        %s' % {-1: 'R', 0: 'N'}.get(c.gear, c.gear)]
+                'Gear:        %s' % {-1: 'R', 0: 'N'}.get(c.gear, c.gear),
+                'Lane Auto Steer: %s' % lane_toggle
+                ]
         elif isinstance(c, carla.WalkerControl):
             self._info_text += [
                 ('Speed:', c.speed, 0.0, 5.556),
