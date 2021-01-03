@@ -203,7 +203,7 @@ def calculateSteeringAngle(img,lines):
     return steering_angle
 
 
-def stabilizeSteeringAngle(curr_steering_angle, new_steering_angle, num_of_lane_lines, max_angle_deviation_two_lines=5, max_angle_deviation_one_lane=1):
+def stabilizeSteeringAngle(curr_steering_angle, new_steering_angle, num_of_lane_lines, max_angle_deviation_two_lines=2, max_angle_deviation_one_lane=1):
     """
     Using last steering angle to stabilize the steering angle
     This can be improved to use last N angles, etc

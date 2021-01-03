@@ -108,9 +108,20 @@ class KeyboardControl(object):
                     else:
                         world.recording_start += 1
                     world.hud.notification("Recording start time is %d" % (world.recording_start))
+                
+                #Activate Lane Detection
+                elif event.key == K_l and (pygame.key.get_mods() & KMOD_CTRL):
+                    core.app['DETECTION_LANE'] = not core.app['DETECTION_LANE']
+                    if not core.app['DETECTION_LANE']:
+                        core.app['LANE_STEERING'] = False
+
+                #Activate lane steering
                 elif event.key == K_l:
-                    core.app['LANE_STEERING'] = not core.app['LANE_STEERING']
-                    world.hud.notification(str('Lane Auto Steering Toggle' + str(core.app['LANE_STEERING'])))
+                    if core.app['DETECTION_LANE']:
+                        core.app['LANE_STEERING'] = not core.app['LANE_STEERING']
+                        world.hud.notification(str('Lane Auto Steering Toggle' + str(core.app['LANE_STEERING'])))
+                
+                
                 if isinstance(self._control, carla.VehicleControl):
                     if event.key == K_q:
                         self._control.gear = 1 if self._control.reverse else -1
