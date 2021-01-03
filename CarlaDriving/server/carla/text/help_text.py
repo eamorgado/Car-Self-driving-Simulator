@@ -1,9 +1,7 @@
 """
-Welcome to CARLA manual control.
+Welcome to CARLA manual control and driving control.
 Use ARROWS or WASD keys for control.
-    W            : throttle
-    S            : brake
-    AD           : steer
+    W - S - AD   : throttle - brake - steer
     Q            : toggle reverse
     Space        : hand-brake
     P            : toggle autopilot
@@ -22,6 +20,11 @@ Use ARROWS or WASD keys for control.
     F1           : toggle HUD
     H/?          : toggle help
     ESC          : quit
+
+
+    #Detection control------------
+    L            : Toggle lane self driving (requires lane detection)
+    CTRL + L     : Toggle Lane Detection
 """
 
 from __future__ import print_function
