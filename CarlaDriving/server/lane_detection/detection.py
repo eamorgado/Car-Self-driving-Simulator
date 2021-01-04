@@ -3,7 +3,6 @@ import cv2 as cv
 import math
 from server.cv_utils import *
 from server.lane_detection.utils import *
-import matplotlib.pyplot as plt
 
 left_a, left_b, left_c = [],[],[]
 right_a, right_b, right_c = [],[],[]
@@ -31,7 +30,6 @@ def detection(img,service,curr_steering_angle,show_canny=False,show_hough=False)
     lines_img = cv.add(lines_img, middle_img) 
 
     img =  cv.addWeighted(img, 1, lines_img, 0.5, 1)
-
     cv.imshow("Hough filter",img)
 
     #Steer the car

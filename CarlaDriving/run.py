@@ -1,7 +1,6 @@
 import os
 import argparse
 import sys
-from flask import request
 from server import create_app, init,loop,stop
 from server.logging.log import show_traceback
 
