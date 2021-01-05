@@ -20,7 +20,7 @@ def segmentRegion(frame):
     height_frame = frame.shape[0]
     width_frame = frame.shape[1]
     
-    top_of_mask = height_frame*0.45
+    top_of_mask = height_frame*0.35
     area_interest_vertices = np.array([
         [0,height_frame],
         [width_frame*0.45,top_of_mask],
