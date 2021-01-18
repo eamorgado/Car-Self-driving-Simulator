@@ -57,7 +57,10 @@ class Service():
         #Lane params
         core.app['DETECTION_LANE'] = False
         core.app['LANE_STEERING'] = False
-        core.app['LANE_STEERING_ANGLE'] = 0.0
+        core.app['LANE_STEERING_ANGLE'] = [0.0]
+        #Memory of controller
+        core.app['MAX_LANE_STEERING_ANGLES'] = 100
+        core.app['MAX_LANE_STEERING_ANGLE_GROWTH'] = 0.3
         lane_steering_angle = 90
         #-----------------
         while True:
@@ -89,7 +92,7 @@ class Service():
                     converted_angle = math.cos(converted_angle) * -1
                     
                     #print(t + '\t' + str(converted_angle))
-                    core.app['LANE_STEERING_ANGLE'] = converted_angle
+                    core.app['LANE_STEERING_ANGLE'].append(converted_angle)
 
                     self.hud.notification(t)
             
