@@ -31,7 +31,8 @@ if __name__ == '__main__':
         parser.add_argument('--rcnn-net-dim',dest='rcnn_net_dim',metavar='WxH', default='224x224')
         parser.add_argument('--rcnn-max-proposals',dest='rcnn_max_proposals',type=int,default=200)
         parser.add_argument('--rcnn-positive-class',dest='rcc_positive_class',default='signal')
-        parser.add_argument('--rcnn-threshold',dest='rcnn_threshold',default=0.7)
+        parser.add_argument('--rcnn-threshold',dest='rcnn_threshold',default=0.99)
+        parser.add_argument('--rcnn-loop-counter',dest='rcnn_loop_counter',default=1000)
 
         parser.set_defaults(debug=False,autopilot=False)
 
@@ -53,7 +54,7 @@ if __name__ == '__main__':
         rcnn_max_proposals = int(args.rcnn_max_proposals)
         rcc_positive_class = str(args.rcc_positive_class)
         rcnn_threshold = float(args.rcnn_threshold)
-
+        rcnn_loop_counter = int(args.rcnn_loop_counter)
 
         configs = {
             'SCREEN_WIDTH': width,
@@ -71,6 +72,7 @@ if __name__ == '__main__':
             'RCNN_MAX_PROPOSALS': rcnn_max_proposals,
             'RCNN_POSITIVE_CLASS': rcc_positive_class,
             'RCNN_THRESHOLD': rcnn_threshold,
+            'RCNN_LOOP_COUNTER': rcnn_loop_counter,
         }
 
         

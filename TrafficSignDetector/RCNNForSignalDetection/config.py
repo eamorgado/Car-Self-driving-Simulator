@@ -30,9 +30,9 @@ MAX_NEGATIVE = 10
 INPUT_DIMS = (224, 224)
 
 # define the path to the output model and label binarizer
-MODEL_PATH = "./data/model.h5"
-ENCODER_PATH = "./data/map.pickle"
+MODEL_PATH = "../../CarlaDriving/server/signal_detection/model_data/model_10.h5"
+ENCODER_PATH = "../../CarlaDriving/server/signal_detection/model_data/map.pickle"
 
 # define the minimum probability required for a positive prediction
 # (used to filter out false-positive predictions)
-MIN_PROBA = 0.7
+MIN_PROBA = 0.995

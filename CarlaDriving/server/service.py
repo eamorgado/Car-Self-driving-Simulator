@@ -50,6 +50,7 @@ class Service():
             'RCNN_MODEL_PATH','RCNN_MAP_PATH',
             'RCNN_NET_DIM','RCNN_MAX_PROPOSALS',
             'RCNN_POSITIVE_CLASS','RCNN_THRESHOLD',
+            'RCNN_LOOP_COUNTER',
         ]
         for k in keys:
             core.app[k] = configs[k]
@@ -62,7 +63,7 @@ class Service():
         #Set Lane Params
         core.app['DETECTION_LANE'] = False
         core.app['LANE_STEERING'] = False
-        core.app['LANE_STEERING_ANGLE'] = 0.0
+        core.app['LANE_STEERING_ANGLE'] = [0.0]
 
     def stop(self):
         if self.world and self.world.recording_enabled:
@@ -81,6 +82,9 @@ class Service():
         core.app['MAX_LANE_STEERING_ANGLE_GROWTH'] = 0.3
         lane_steering_angle = 90
         #-----------------
+        reset = core.app['RCNN_LOOP_COUNTER']
+        count = reset
+        #
         while True:
             self.clock.tick_busy_loop(60)
             if self.controller.parse_events(self.client, self.world, self.clock):
@@ -118,7 +122,11 @@ class Service():
 
 
             if core.app['DETECTION_SIGNAL']:
-                rcnn_image = signal_detection(camera_image,self)
+                if count == 0:
+                    rcnn_image = signal_detection(camera_image,self)
+                    count = reset
+                else:
+                    count -= 1
 
 
             

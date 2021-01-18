@@ -67,6 +67,8 @@ class HUD(object):
             detection_lane = 'On' if core.app['DETECTION_LANE'] else 'OFF'
             lane_steering_toggle = 'On' if core.app['LANE_STEERING'] else 'OFF'
 
+            detection_signal = 'On' if core.app['DETECTION_SIGNAL'] else 'OFF'
+
             self._info_text += [
                 ('Throttle:', c.throttle, 0.0, 1.0),
                 ('Steer:', c.steer, -1.0, 1.0),
@@ -77,7 +79,9 @@ class HUD(object):
                 'Gear:        %s' % {-1: 'R', 0: 'N'}.get(c.gear, c.gear),
                 '',
                 'Lane Detection: %s' % detection_lane,
-                'Lane Auto Steer: %s' % lane_steering_toggle
+                'Lane Auto Steer: %s' % lane_steering_toggle,
+                '',
+                'Traffic Sign Detection: %s' % detection_signal,
                 ]
         elif isinstance(c, carla.WalkerControl):
             self._info_text += [

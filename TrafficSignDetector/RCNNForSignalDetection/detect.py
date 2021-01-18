@@ -32,7 +32,7 @@ lb = pickle.loads(open(config.ENCODER_PATH, "rb").read())
 #Load image + resize
 #TODO: change resize size to app/Carla
 image = cv.imread(args["image"])
-image = imutils.resize(image, width=500)
+image = imutils.resize(image, width=720)
 
 
 
@@ -152,7 +152,7 @@ cv.imshow("Before NMS", clone)
 
 # run non-maxima suppression on the bounding boxes
 print(boxes.shape,'\t',proba.shape)
-boxIdxs = non_max_suppression(boxes, 0.3)
+boxIdxs = non_max_suppression(boxes, 0.5)
 
 # loop over the bounding box indexes
 for i in boxIdxs:
@@ -166,5 +166,7 @@ for i in boxIdxs:
 	text= config.POSITIVE_CLASS.capitalize() + ": {:.2f}%".format(proba[i] * 100)
 	cv.putText(image, text, (startX, y),cv.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
 # show the output image *after* running NMS
+
+image = cv.resize(image,(940,720))
 cv.imshow("After NMS", image)
 cv.waitKey(0)

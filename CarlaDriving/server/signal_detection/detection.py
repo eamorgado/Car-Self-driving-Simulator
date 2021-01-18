@@ -13,12 +13,6 @@ from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
 
 def init():
-    if core.app['SIGNAL_RCNN_MODEL'] is not None:
-        core.app['SIGNAL_RCNN_MODEL'] = None
-
-    if core.app['SIGNAL_RCNN_MAP'] is not None:
-        core.app['SIGNAL_RCNN_MAP'] = None
-
     model = load_model(core.app['RCNN_MODEL_PATH'])
     lb = pickle.loads(open(core.app['RCNN_MAP_PATH'], "rb").read())
 
@@ -63,6 +57,8 @@ def generateBoxProposals(img,rects):
         proposals.append(roi)
         boxes.append((x, y, x + w, y + h))
     
+    proposals = np.array(proposals, dtype="float32")
+    boxes = np.array(boxes, dtype="int32")
     return proposals,boxes
 
 
@@ -83,26 +79,24 @@ def filterThreshold(boxes,probabilities):
 
     #Get only positive proposals => returns array
     idxs = np.where(labels == core.app['RCNN_POSITIVE_CLASS'])[0]
-
-
     #Get bounding boxes for only positive classes
     boxes = boxes[idxs]
 
     # label probabilities associated with the positive class (in our case positive class is )
-    proba = probabilities[idxs][:, positive_class_index]
+    probabilities = probabilities[idxs][:, positive_class_index]
 
 
     #Minimum probability threshold
-    idxs = np.where(proba >= core.app['RCNN_THRESHOLD'])
+    idxs = np.where(probabilities >= core.app['RCNN_THRESHOLD'])
     boxes = boxes[idxs]
-    proba = proba[idxs]
+    probabilities = probabilities[idxs]
 
     return boxes,probabilities
 
 
-def visualizeBeforeNMS(clone,boxes,proba,color=(0, 255, 0)):
+def visualizeBeforeNMS(clone,boxes,probabilities,color=(0, 255, 0)):
     # loop over the bounding boxes and associated probabilities
-    for (box, prob) in zip(boxes, proba):
+    for (box, prob) in zip(boxes, probabilities):
         # draw the bounding box, label, and probability on the image
         (startX, startY, endX, endY) = box
         cv.rectangle(clone, (startX, startY), (endX, endY), color, 2)
@@ -132,30 +126,33 @@ def visualizeAfterNMS(img,boxes,probabilities,threshold=0.3,color=(0, 255, 0)):
     return img
 
 def detection(img,service):
-    img = resizeImg(img,(service.screen_width,service.screen_height)) #imutils.resize(image, width=500)
+    img = imutils.resize(img, width=500)#resizeImg(img,(service.screen_width,service.screen_height)) #imutils.resize(image, width=500)
 
     print("[INFO] running selective search...")
     rectangles = selectiveSearch(img)
 
     proposals,boxes = generateBoxProposals(img,rectangles)
-    proposals = np.array(proposals, dtype="float32")
-    boxes = np.array(boxes, dtype="int32")
+    if len(boxes) < 1 or len(proposals) < 1:
+        return img
 
     print("[INFO] classifying proposals...")
     probabilities = classify(proposals)
 
     print("[INFO] applying NMS...")
     boxes, probabilities = filterThreshold(boxes,probabilities)
-
+    if len(boxes) < 1 or len(probabilities) < 1:
+        return img
     print("[INFO] Show before NMS...")
 
     clone = img.copy()
     clone = visualizeBeforeNMS(clone,boxes,probabilities)
-    #clone = resizeImg(clone,(service.screen_width,service.screen_height))
+    clone = resizeImg(clone,(service.screen_width,service.screen_height))
+    clone = convertRGB(clone)
     cv.imshow("Before NMS",clone)
 
-    img = visualizeAfterNMS(img,boxes,probabilities)
-    #img = resizeImg(img,(service.screen_width,service.screen_height))
+    img = visualizeAfterNMS(img,boxes,probabilities,threshold=0.5)
+    img = resizeImg(img,(service.screen_width,service.screen_height))
+    img = convertRGB(img)
     cv.imshow("After NMS",img)
 
     return img

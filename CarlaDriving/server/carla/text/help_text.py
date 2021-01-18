@@ -25,6 +25,8 @@ Use ARROWS or WASD keys for control.
     #Detection control------------
     L            : Toggle lane self driving (requires lane detection)
     CTRL + L     : Toggle Lane Detection
+
+    CTRL + S     : Toggle Traffic Sign Detection
 """
 
 from __future__ import print_function

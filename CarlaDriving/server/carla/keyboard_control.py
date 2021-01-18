@@ -163,11 +163,17 @@ class KeyboardControl(object):
                             elif v == 'q':
                                 flag = False
 
-                elif event.key == K_l and (pygame.key.get_mods() & KMOD_SHIFT) and (pygame.key.get_mods() & K_MINUS):
-                    if core.app['DETECTION_LANE']:
-                        core.app['MAX_LANE_STEERING_ANGLES'] += 10
 
-                
+                #Activate Signal Detection
+                elif event.key == K_s and (pygame.key.get_mods() & KMOD_CTRL):
+                    core.app['DETECTION_SIGNAL'] = not core.app['DETECTION_SIGNAL']
+                    if core.app['DETECTION_SIGNAL']:
+                        from server.signal_detection.detection import init
+                        init()
+                    else:
+                        core.app['SIGNAL_RCNN_MODEL'] = None
+                        core.app['SIGNAL_RCNN_MAP'] = None
+
                 if isinstance(self._control, carla.VehicleControl):
                     if event.key == K_q:
                         self._control.gear = 1 if self._control.reverse else -1
@@ -203,12 +209,12 @@ class KeyboardControl(object):
             self._steer_cache = 0.0
 
         if core.app['LANE_STEERING']:
-            new_angle = core.app['LANE_STEERING_ANGLE'][-1]
-            before = core.app['LANE_STEERING_ANGLE'][:-1]
-            angle = sum(before)/len(before)
-
+            #new_angle = core.app['LANE_STEERING_ANGLE'][-1]
+            #before = core.app['LANE_STEERING_ANGLE'][:-1]
+            #angle = sum(before)/len(before)
+            angle = statistics.median(core.app['LANE_STEERING_ANGLE'])
             
-            if new_angle > (abs(angle) + core.app['MAX_LANE_STEERING_ANGLE_GROWTH']):
+            """if new_angle > (abs(angle) + core.app['MAX_LANE_STEERING_ANGLE_GROWTH']):
                 new_angle = abs(angle) + core.app['MAX_LANE_STEERING_ANGLE_GROWTH']
                 core.app['LANE_STEERING_ANGLE'][-1] = new_angle
                 #angle = new_angle
@@ -218,9 +224,9 @@ class KeyboardControl(object):
                 core.app['LANE_STEERING_ANGLE'][-1] = new_angle
                 #angle = new_angle
                 print('YES')
-            
-            angle = sum(core.app['LANE_STEERING_ANGLE'])/len(core.app['LANE_STEERING_ANGLE'])
-            print(angle)
+            """
+            #angle = sum(core.app['LANE_STEERING_ANGLE'])/len(core.app['LANE_STEERING_ANGLE'])
+            #print(angle)
             #dev = statistics.stdev(core.app['LANE_STEERING_ANGLE'])
             print('Size: ',len(core.app['LANE_STEERING_ANGLE']))
             #print('STDV: ',dev)
