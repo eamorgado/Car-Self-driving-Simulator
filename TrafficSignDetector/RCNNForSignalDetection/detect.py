@@ -152,7 +152,7 @@ cv.imshow("Before NMS", clone)
 
 # run non-maxima suppression on the bounding boxes
 print(boxes.shape,'\t',proba.shape)
-boxIdxs = non_max_suppression(boxes, 0.5)
+boxIdxs = non_max_suppression(boxes, 0.3)
 
 # loop over the bounding box indexes
 for i in boxIdxs:

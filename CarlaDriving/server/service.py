@@ -63,7 +63,7 @@ class Service():
         #Set Lane Params
         core.app['DETECTION_LANE'] = False
         core.app['LANE_STEERING'] = False
-        core.app['LANE_STEERING_ANGLE'] = [0.0]
+        core.app['LANE_STEERING_ANGLE'] = 0.0
 
     def stop(self):
         if self.world and self.world.recording_enabled:
@@ -116,8 +116,8 @@ class Service():
                     converted_angle = math.cos(converted_angle) * -1
                     
                     #print(t + '\t' + str(converted_angle))
-                    core.app['LANE_STEERING_ANGLE'].append(converted_angle)
-
+                    #core.app['LANE_STEERING_ANGLE'].append(converted_angle)
+                    core.app['LANE_STEERING_ANGLE'] = converted_angle
                     self.hud.notification(t)
 
 
