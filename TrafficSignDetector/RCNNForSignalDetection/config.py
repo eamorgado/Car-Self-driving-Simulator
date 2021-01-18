@@ -10,7 +10,7 @@ ORIG_ANNOTS = os.path.sep.join([ORIG_BASE_PATH, "gt.txt"])
 # define the base path to the *new* dataset after running our dataset
 # builder scripts and then use the base path to derive the paths to
 # our output class label directories
-BASE_PATH = "./dataset"
+BASE_PATH = "/home/eamorgado/Desktop/dataset/dataset"
 POSITIVE_CLASS = 'signal'
 NEGATIVE_CLASS = 'no_signal'
 POSITIVE_PATH = os.path.sep.join([BASE_PATH, POSITIVE_CLASS]) # positive (there is a raccoon)
@@ -30,8 +30,8 @@ MAX_NEGATIVE = 10
 INPUT_DIMS = (224, 224)
 
 # define the path to the output model and label binarizer
-MODEL_PATH = "./data/signal_detector.h5"
-ENCODER_PATH = "./data/label_encoder.pickle"
+MODEL_PATH = "./data/model.h5"
+ENCODER_PATH = "./data/map.pickle"
 
 # define the minimum probability required for a positive prediction
 # (used to filter out false-positive predictions)

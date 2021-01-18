@@ -38,8 +38,8 @@ args = vars(ap.parse_args())
 # initialize the initial learning rate, number of epochs to train for,
 # and batch size
 INIT_LR = 1e-4	# learning rate
-EPOCHS = 5		# number of epochs to train
-BS = 32			# batch size
+EPOCHS = 50		# number of epochs to train
+BS = 16			# batch size
 
 # %% grab the list of images in our dataset directory, then initialize
 # the list of data (i.e., images) and class labels
@@ -85,7 +85,7 @@ aug = ImageDataGenerator(
 	width_shift_range=0.2,
 	height_shift_range=0.2,
 	shear_range=0.15,
-	horizontal_flip=True,
+	horizontal_flip=False,
 	fill_mode="nearest")
 
 print("[INFO] Data augmentation finished...")
