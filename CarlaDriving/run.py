@@ -26,6 +26,13 @@ if __name__ == '__main__':
         parser.add_argument('--world',dest='world',default='Town04',help='Carla world: Town04, Town06 highway, Town07 country')
 
 
+        parser.add_argument('--rcnn-model-path',dest='rcc_model_path',default='./server/signal_detection/model_data/model_50.h5')
+        parser.add_argument('--rcnn-map-path',dest='rcnn_map_path',default='./server/signal_detection/model_data/map.pickle')
+        parser.add_argument('--rcnn-net-dim',dest='rcnn_net_dim',metavar='WxH', default='224x224')
+        parser.add_argument('--rcnn-max-proposals',dest='rcnn_max_proposals',type=int,default=200)
+        parser.add_argument('--rcnn-positive-class',dest='rcc_positive_class',default='signal')
+        parser.add_argument('--rcnn-threshold',dest='rcnn_threshold',default=0.7)
+
         parser.set_defaults(debug=False,autopilot=False)
 
         args = parser.parse_args()
@@ -39,6 +46,14 @@ if __name__ == '__main__':
         car_name = args.car_name
         world = args.world
 
+        rcc_model_path = args.rcc_model_path
+        rcnn_map_path = args.rcnn_map_path
+        rcnn_net_dim_width,rcnn_net_dim_height = [int(x) for x in args.rcnn_net_dim.split('x')]
+        rcnn_net_dim = (rcnn_net_dim_width,rcnn_net_dim_height)
+        rcnn_max_proposals = int(args.rcnn_max_proposals)
+        rcc_positive_class = str(args.rcc_positive_class)
+        rcnn_threshold = float(args.rcnn_threshold)
+
 
         configs = {
             'SCREEN_WIDTH': width,
@@ -48,7 +63,14 @@ if __name__ == '__main__':
             'AUTO_PILOT': autopilot,
             'ROLENAME': car_name,
             'FILTER': car_type,
-            'WORLD_NAME': world
+            'WORLD_NAME': world,
+
+            'RCNN_MODEL_PATH': rcc_model_path,
+            'RCNN_MAP_PATH': rcnn_map_path,
+            'RCNN_NET_DIM': rcnn_net_dim,
+            'RCNN_MAX_PROPOSALS': rcnn_max_proposals,
+            'RCNN_POSITIVE_CLASS': rcc_positive_class,
+            'RCNN_THRESHOLD': rcnn_threshold,
         }
 
         

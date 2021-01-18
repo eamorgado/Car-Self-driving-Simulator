@@ -36,4 +36,4 @@ def detection(img,service,curr_steering_angle,show_canny=False,show_hough=False)
     steering_angle = stabilizeSteeringAngle(curr_steering_angle,steering_angle,len(lines))
     #print('Angle', steering_angle)
 
-    return steering_angle
+    return steering_angle,img

@@ -31,7 +31,7 @@ INPUT_DIMS = (224, 224)
 
 # define the path to the output model and label binarizer
 MODEL_PATH = "./data/model.h5"
-ENCODER_PATH = "./data/label_map.pickle"
+ENCODER_PATH = "./data/map.pickle"
 
 # define the minimum probability required for a positive prediction
 # (used to filter out false-positive predictions)
