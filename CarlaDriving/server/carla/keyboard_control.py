@@ -30,8 +30,14 @@ from pygame.locals import K_w
 from pygame.locals import K_l
 from pygame.locals import K_MINUS
 from pygame.locals import K_EQUALS
+from pygame.locals import K_PLUS
 
+import statistics
 from server import core
+
+
+import numpy as np
+
 
 class KeyboardControl(object):
     def __init__(self, world, start_in_autopilot):
@@ -119,9 +125,59 @@ class KeyboardControl(object):
                 elif event.key == K_l:
                     if core.app['DETECTION_LANE']:
                         core.app['LANE_STEERING'] = not core.app['LANE_STEERING']
+                        if not core.app['LANE_STEERING']:
+                            core.app['LANE_STEERING_ANGLE'] = [0.0]
                         world.hud.notification(str('Lane Auto Steering Toggle' + str(core.app['LANE_STEERING'])))
                 
-                
+                #Increase - decrease lane params:
+                    """
+                    elif event.key == K_PLUS:
+                        if core.app['DETECTION_LANE']:
+                            h = 'Lane Detection Config:\n1) Max Lane Steering Angles\n2)Max Lane growth\nq)Quit\n'
+                            flag = True
+                            while flag:
+                                print(h)
+                                v = str(input('Input: '))
+                                if v == '1':
+                                    flag_angles = True
+                                    while flag_angles:
+                                        h_angles = 'Max Lane Steering Angles: ' + str(core.app['MAX_LANE_STEERING_ANGLES']) + '\n+) Increase (+10)\n-) Decrease (-10)\nq) Back\n'
+                                        print(h_angles)
+                                        v_angles = str(input('Input: '))
+                                        if v_angles == '+':
+                                            core.app['MAX_LANE_STEERING_ANGLES'] += 10
+                                        elif v_angles == '-':
+                                            core.app['MAX_LANE_STEERING_ANGLES'] -= 10
+                                        elif v_angles == 'q':
+                                            flag_angles = False
+                                elif v == '2':
+                                    flag_angles = True
+                                    while flag_angles:
+                                        h_angles = 'Max Lane Growth:  ' + str(core.app['MAX_LANE_STEERING_ANGLE_GROWTH']) + '\n+) Increase (+10)\n-) Decrease (-10)\nq) Back\n'
+                                        print(h_angles)
+                                        v_angles = str(input('Input: '))
+                                        if v_angles == '+':
+                                            core.app['MAX_LANE_STEERING_ANGLE_GROWTH'] = min(1.0, (core.app['MAX_LANE_STEERING_ANGLE_GROWTH'] + 0.01))
+                                            core.app['MAX_LANE_STEERING_ANGLE_GROWTH'] = abs(core.app['MAX_LANE_STEERING_ANGLE_GROWTH'])
+                                        elif v_angles == '-':
+                                            core.app['MAX_LANE_STEERING_ANGLE_GROWTH'] = max(0.0, (core.app['MAX_LANE_STEERING_ANGLE_GROWTH'] - 0.01))
+                                            core.app['MAX_LANE_STEERING_ANGLE_GROWTH'] = abs(core.app['MAX_LANE_STEERING_ANGLE_GROWTH'])
+                                        elif v_angles == 'q':
+                                            flag_angles = False
+                                elif v == 'q':
+                                    flag = False
+                    """
+
+                #Activate Signal Detection
+                elif event.key == K_s and (pygame.key.get_mods() & KMOD_CTRL):
+                    core.app['DETECTION_SIGNAL'] = not core.app['DETECTION_SIGNAL']
+                    if core.app['DETECTION_SIGNAL']:
+                        from server.signal_detection.detection import init
+                        init()
+                    else:
+                        core.app['SIGNAL_RCNN_MODEL'] = None
+                        core.app['SIGNAL_RCNN_MAP'] = None
+
                 if isinstance(self._control, carla.VehicleControl):
                     if event.key == K_q:
                         self._control.gear = 1 if self._control.reverse else -1
@@ -145,7 +201,7 @@ class KeyboardControl(object):
             elif isinstance(self._control, carla.WalkerControl):
                 self._parse_walker_keys(pygame.key.get_pressed(), clock.get_time())
             world.player.apply_control(self._control)
-
+    
     def _parse_vehicle_keys(self, keys, milliseconds):
         self._control.throttle = 1.0 if keys[K_UP] or keys[K_w] else 0.0
         steer_increment = 5e-4 * milliseconds
@@ -157,9 +213,37 @@ class KeyboardControl(object):
             self._steer_cache = 0.0
 
         if core.app['LANE_STEERING']:
-            self._steer_cache = core.app['LANE_STEERING_ANGLE']
+            angle = core.app['LANE_STEERING_ANGLE']
+            #arr = np.array(core.app['LANE_STEERING_ANGLE'])
+            #norm = np.linalg.norm(arr)
+            #normal_array = arr/norm
+            #angle = normal_array[-1]
+            #new_angle = core.app['LANE_STEERING_ANGLE'][-1]
+            #before = core.app['LANE_STEERING_ANGLE'][:-1]
+            #angle = sum(before)/len(before)
+            #angle = statistics.median(core.app['LANE_STEERING_ANGLE'])
+            
+            """if new_angle > (abs(angle) + core.app['MAX_LANE_STEERING_ANGLE_GROWTH']):
+                new_angle = abs(angle) + core.app['MAX_LANE_STEERING_ANGLE_GROWTH']
+                core.app['LANE_STEERING_ANGLE'][-1] = new_angle
+                #angle = new_angle
+                print('YES')
+            elif new_angle < (abs(angle)*-1 - core.app['MAX_LANE_STEERING_ANGLE_GROWTH']):
+                new_angle = abs(angle)*-1 - core.app['MAX_LANE_STEERING_ANGLE_GROWTH']
+                core.app['LANE_STEERING_ANGLE'][-1] = new_angle
+                #angle = new_angle
+                print('YES')
+            """
+            #angle = sum(core.app['LANE_STEERING_ANGLE'])/len(core.app['LANE_STEERING_ANGLE'])
+            #print(angle)
+            #dev = statistics.stdev(core.app['LANE_STEERING_ANGLE'])
+            #print('Size: ',len(core.app['LANE_STEERING_ANGLE']))
+            #print('STDV: ',dev)
+            #if len(core.app['LANE_STEERING_ANGLE']) > core.app['MAX_LANE_STEERING_ANGLES']:
+            #    core.app['LANE_STEERING_ANGLE'] = [angle]
+            self._steer_cache = angle
 
-        self._steer_cache = min(0.7, max(-0.7, self._steer_cache))
+        self._steer_cache = min(0.5, max(-0.5, self._steer_cache))
         
 
         self._control.steer = round(self._steer_cache, 1)

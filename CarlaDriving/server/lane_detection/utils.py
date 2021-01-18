@@ -152,8 +152,6 @@ def showMidLine(img,steering_angle,color=(0, 255, 0),thickness=5):
     line_image = np.zeros_like(img)
     height, width, _ = img.shape
 
-    # heading line (x1,y1) is always center bottom of the screen
-    # (x2, y2) requires a bit of trigonometry
     # Note: the steering angle of:
     # 0-89 degree: turn left
     # 90 degree: going straight
@@ -189,7 +187,7 @@ def calculateSteeringAngle(img,lines):
     else: #2 lines
         _, _, left_x2, _ = lines[0]
         _, _, right_x2, _ = lines[1]
-        camera_mid_offset_percent = 0.02 # 0.0 means car pointing to center, -0.03: car is centered to left, +0.03 means car pointing to right
+        camera_mid_offset_percent = 0.0 # 0.0 means car pointing to center, -0.03: car is centered to left, +0.03 means car pointing to right
         mid = int(width / 2 * (1 + camera_mid_offset_percent))
         x_offset = (left_x2 + right_x2) / 2 - mid
 
