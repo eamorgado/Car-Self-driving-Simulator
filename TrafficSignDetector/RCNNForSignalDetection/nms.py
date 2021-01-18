@@ -53,9 +53,10 @@ def non_max_suppression_slow(boxes, overlapThresh):
             # compute the ratio of overlap between the computed
 			# bounding box and the bounding box in the area list
 			overlap = float(w * h) / area[j]
-			
+			print(overlap)
             # if there is sufficient overlap, suppress the
 			# current bounding box
+			
 			if overlap > overlapThresh:
 				suppress.append(pos)
 		
@@ -114,11 +115,10 @@ def non_max_suppression(boxes, overlapThresh):
 		
 		# compute the ratio of overlap
 		overlap = (w * h) / area[idxs[:last]]
-		
+		#print(np.where(overlap > overlapThresh)[0].shape)
 		# delete all indexes from the index list that have
-		idxs = np.delete(idxs, np.concatenate(([last],
-                                         np.where(overlap > overlapThresh)[0])))
+		idxs = np.delete(idxs, np.concatenate(([last], np.where(overlap > overlapThresh)[0])))
 	
 	# return only the bounding boxes that were picked using the
 	# integer data type
-	return boxes[pick].astype("int")
+	return pick

@@ -1,4 +1,4 @@
-opencv_python==4.5.1.48
+opencv-contrib-python==4.5.1.48
 imutils==0.5.4
 matplotlib==3.3.3
 tensorflow_gpu==2.4.0

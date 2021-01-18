@@ -11,8 +11,10 @@ ORIG_ANNOTS = os.path.sep.join([ORIG_BASE_PATH, "gt.txt"])
 # builder scripts and then use the base path to derive the paths to
 # our output class label directories
 BASE_PATH = "./dataset"
-POSITIVE_PATH = os.path.sep.join([BASE_PATH, "signal"]) # positive (there is a raccoon)
-NEGATIVE_PATH = os.path.sep.join([BASE_PATH, "no_signal"]) # negative (no raccoon in the input image)
+POSITIVE_CLASS = 'signal'
+NEGATIVE_CLASS = 'no_signal'
+POSITIVE_PATH = os.path.sep.join([BASE_PATH, POSITIVE_CLASS]) # positive (there is a raccoon)
+NEGATIVE_PATH = os.path.sep.join([BASE_PATH, NEGATIVE_CLASS]) # negative (no raccoon in the input image)
 
 # define the number of max proposals used when running selective
 # search for (1) gathering training data and (2) performing inference
@@ -33,4 +35,4 @@ ENCODER_PATH = "./data/label_encoder.pickle"
 
 # define the minimum probability required for a positive prediction
 # (used to filter out false-positive predictions)
-MIN_PROBA = 0.99
+MIN_PROBA = 0.7
